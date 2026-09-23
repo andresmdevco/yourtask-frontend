@@ -22,7 +22,7 @@ export default function CreateProjectView() {
   const { mutate } = useMutation({
     mutationFn: createProject,
     onError: (error) => {
-      toast.error(error.message)
+      toast.error(error.message);
     },
     onSuccess: (data) => {
       toast.success(data);
