@@ -2,12 +2,15 @@ import { Fragment } from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import type { Task } from '@/types/index';
+import { useNavigate } from 'react-router-dom';
 
 type TaskCardProps = {
   task: Task;
 };
 
 export default function TaskCard({ task }: TaskCardProps) {
+  const navigate = useNavigate();
+
   return (
     <li className="p-5 bg-white border border-slate-300 flex justify-between gap-3">
       <div className="min-w-0 flex flex-col gap-y-4">
@@ -34,18 +37,27 @@ export default function TaskCard({ task }: TaskCardProps) {
           >
             <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
               <MenuItem>
-                <button type="button" className="block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer">
+                <button
+                  type="button"
+                  className="block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer"
+                >
                   Ver Tarea
                 </button>
               </MenuItem>
               <MenuItem>
-                <button type="button" className="block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer">
+                <button
+                  type="button"
+                  className="block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer"
+                  onClick={() => navigate(location.pathname + `?editTask=${task._id}`)}
+                >
                   Editar Tarea
                 </button>
               </MenuItem>
-
               <MenuItem>
-                <button type="button" className="block px-3 py-1 text-sm leading-6 text-red-500 cursor-pointer">
+                <button
+                  type="button"
+                  className="block px-3 py-1 text-sm leading-6 text-red-500 cursor-pointer"
+                >
                   Eliminar Tarea
                 </button>
               </MenuItem>
