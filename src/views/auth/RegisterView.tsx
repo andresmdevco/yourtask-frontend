@@ -1,7 +1,10 @@
-import { useForm } from 'react-hook-form';
+import { useWatch, useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
 import type { UserRegistrationForm } from '@/types/index';
 import ErrorMessage from '@/components/ErrorMessage';
-import { Link } from 'react-router-dom';
+import { createAccount } from '@/api/AuthAPI';
+import { toast } from 'react-toastify';
 
 export default function RegisterView() {
   const initialValues: UserRegistrationForm = {
@@ -13,15 +16,26 @@ export default function RegisterView() {
 
   const {
     register,
+    control,
     handleSubmit,
-    watch,
     reset,
     formState: { errors },
   } = useForm<UserRegistrationForm>({ defaultValues: initialValues });
 
-  const password = watch('password');
+  const { mutate } = useMutation({
+    mutationFn: createAccount,
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: (data) => {
+      toast.success(data);
+      reset();
+    },
+  });
 
-  const handleRegister = (formData: UserRegistrationForm) => {};
+  const password = useWatch({ control, name: 'password' });
+
+  const handleRegister = (formData: UserRegistrationForm) => mutate(formData);
 
   return (
     <>
