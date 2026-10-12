@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import AddMemberModal from '@/components/team/AddMemberModal';
 import { getProjectTeam, removeUserFromProject } from '@/api/TeamAPI';
 import { toast } from 'react-toastify';
@@ -18,15 +18,16 @@ export default function ProjectTeamView() {
     retry: false,
   });
 
+  const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: removeUserFromProject,
     onError: (error) => {
       toast.error(error.message);
     },
     onSuccess: (data) => {
-      toast.success(data)
-    }
-
+      toast.success(data);
+      queryClient.invalidateQueries({ queryKey: ['projectTeam', projectId] });
+    },
   });
 
   if (isLoading) return 'Cargando...';
@@ -72,7 +73,7 @@ export default function ProjectTeamView() {
                 </div>
                 <div className="flex shrink-0 items-center gap-x-6">
                   <Menu as="div" className="relative flex-none">
-                    <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
+                    <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900 cursor-pointer">
                       <span className="sr-only">opciones</span>
                       <EllipsisVerticalIcon className="h-9 w-9" aria-hidden="true" />
                     </MenuButton>
@@ -89,8 +90,8 @@ export default function ProjectTeamView() {
                         <MenuItem>
                           <button
                             type="button"
-                            className="block px-3 py-1 text-sm leading-6 text-red-500"
-                            onClick={() => mutate({projectId, userId: member._id})}
+                            className="block px-3 py-1 text-sm leading-6 text-red-500 cursor-pointer"
+                            onClick={() => mutate({ projectId, userId: member._id })}
                           >
                             Eliminar del Proyecto
                           </button>
