@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { formatDate } from '@/utils/utils';
 import { statusTranslations } from '@/locales/es';
 import type { TaskStatus } from '@/types/index';
+import NotesPanel from '../notes/NotesPanel';
 
 export default function TaskModalDetails() {
   const params = useParams();
@@ -95,18 +96,22 @@ export default function TaskModalDetails() {
                     </DialogTitle>
                     <p className="text-lg text-slate-500 mb-2">Descripción: {data.description}</p>
 
-                    <p className="text-2xl text-slate-500 mb-2">Historial de Cambios</p>
+                    {data.completedBy.length ? (
+                      <>
+                        <p className="text-2xl text-slate-500 mb-2">Historial de Cambios</p>
 
-                    <ul className="list-decimal">
-                      {data.completedBy.map((activityLog) => (
-                        <li key={activityLog._id}>
-                          <span className="font-bold text-slate-600">
-                            {statusTranslations[activityLog.status]}
-                          </span>{' '}
-                          por: {activityLog.user.name}
-                        </li>
-                      ))}
-                    </ul>
+                        <ul className="list-decimal">
+                          {data.completedBy.map((activityLog) => (
+                            <li key={activityLog._id}>
+                              <span className="font-bold text-slate-600">
+                                {statusTranslations[activityLog.status]}
+                              </span>{' '}
+                              por: {activityLog.user.name}
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : null}
 
                     <div className="my-5 space-y-3">
                       <label className="font-bold">Estado Actual: </label>
@@ -122,6 +127,8 @@ export default function TaskModalDetails() {
                         ))}
                       </select>
                     </div>
+
+                    <NotesPanel />
                   </DialogPanel>
                 </TransitionChild>
               </div>
