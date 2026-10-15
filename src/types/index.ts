@@ -37,6 +37,7 @@ const noteSchema = z.object({
   content: z.string(),
   createdBy: userSchema,
   task: z.string(),
+  createdAt: z.string(),
 });
 export type Note = z.infer<typeof noteSchema>;
 export type NoteFormData = Pick<Note, 'content'>;
@@ -62,6 +63,11 @@ export const taskSchema = z.object({
       _id: z.string(),
       user: userSchema,
       status: taskStatusSchema,
+    }),
+  ),
+  notes: z.array(
+    noteSchema.extend({
+      createdBy: userSchema,
     }),
   ),
   createdAt: z.string(),
