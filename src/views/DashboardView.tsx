@@ -2,9 +2,8 @@ import { Fragment } from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteProject, getProjects } from '@/api/ProjectAPI';
-import { toast } from 'react-toastify';
+import { useQuery } from '@tanstack/react-query';
+import { getProjects } from '@/api/ProjectAPI';
 import { useAuth } from '@/hooks/useAuth';
 import { isManager } from '@/utils/policies';
 import DeleteProjectModal from '@/components/projects/DeleteProjectModal';
@@ -16,18 +15,6 @@ export default function DashboardView() {
   const { data, isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: getProjects,
-  });
-
-  const queryClient = useQueryClient();
-  const { mutate } = useMutation({
-    mutationFn: deleteProject,
-    onError: (error) => {
-      toast.error(error.message);
-    },
-    onSuccess: (data) => {
-      toast.success(data);
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
-    },
   });
 
   if (isLoading && authLoading) return 'Cargando...';
@@ -79,7 +66,7 @@ export default function DashboardView() {
                 </div>
                 <div className="flex shrink-0 items-center gap-x-6">
                   <Menu as="div" className="relative flex-none">
-                    <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
+                    <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900 cursor-pointer">
                       <span className="sr-only">opciones</span>
                       <EllipsisVerticalIcon className="h-9 w-9" aria-hidden="true" />
                     </MenuButton>
