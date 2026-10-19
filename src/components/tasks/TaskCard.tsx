@@ -3,13 +3,13 @@ import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/r
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Task } from '@/types/index';
+import type { TaskProject } from '@/types/index';
 import { deleteTask } from '@/api/TaskAPI';
 import { toast } from 'react-toastify';
 import { useDraggable } from '@dnd-kit/core';
 
 type TaskCardProps = {
-  task: Task;
+  task: TaskProject;
   canEdit: boolean;
 };
 
