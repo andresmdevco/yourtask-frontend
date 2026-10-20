@@ -34,36 +34,23 @@ export default function TaskCard({ task, canEdit }: TaskCardProps) {
   });
 
   const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-        padding: '1.25rem',
-        backgroundColor: '#FFF',
-        width: '300px',
-        display: 'flex',
-        borderWidth: '1px',
-        borderColor: 'rgb(203 213 225 / var(--tw-border-opacity)',
-      }
+    ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` }
     : undefined;
 
   return (
-    <li className="p-5 bg-white border border-slate-300 flex justify-between gap-3">
-      <div
-        {...listeners}
-        {...attributes}
-        ref={setNodeRef}
-        style={style}
-        className="min-w-0 flex flex-col gap-y-4"
-      >
-        <p
-          className="text-xl font-bold text-slate-600 text-left cursor-pointer"
-          onClick={() => navigate(location.pathname + `?viewTask=${task._id}`)}
-        >
-          {task.name}
-        </p>
+    <li
+      {...listeners}
+      {...attributes}
+      ref={setNodeRef}
+      style={style}
+      className="p-5 bg-white border border-slate-300 flex justify-between gap-3 cursor-grab select-none active:cursor-grabbing"
+    >
+      <div className="min-w-0 flex flex-col gap-y-4">
+        <p className="text-xl font-bold text-slate-600 text-left">{task.name}</p>
         <p className="text-slate-500">{task.description}</p>
       </div>
 
-      <div className="flex shrink-0  gap-x-6">
+      <div className="flex shrink-0 gap-x-6" onPointerDown={(e) => e.stopPropagation()}>
         <Menu as="div" className="relative flex-none">
           <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900 cursor-pointer">
             <span className="sr-only">opciones</span>
